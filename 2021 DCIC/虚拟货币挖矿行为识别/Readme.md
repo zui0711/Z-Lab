@@ -1,1 +1,2 @@
-
+- rule_baseline_by三杯猫.ipynb 为三杯猫提供的A榜分数857的规则baseline
+- rule_嘴爷.py 为嘴爷提供的A榜分数948的规则代码，同时对应训练集分数934

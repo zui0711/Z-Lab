@@ -147,14 +147,14 @@ for seed in seeds:
     for fold, (train_idx, val_idx) in enumerate(kf.split(df_train[feats], df_train[LABEL])):
         print('-----------', fold)
         train = lgb.Dataset(df_train.loc[train_idx, feats],
-                            df_train.loc[train_idx, 'new_label'])
+                            df_train.loc[train_idx, LABEL])
         val = lgb.Dataset(df_train.loc[val_idx, feats],
-                          df_train.loc[val_idx, 'new_label'])
+                          df_train.loc[val_idx, LABEL])
         model = lgb.train(params, train, valid_sets=[val], num_boost_round=20000,
                           callbacks=[lgb.early_stopping(100), lgb.log_evaluation(2000)])
 
         oof[val_idx] += (model.predict(df_train.loc[val_idx, feats])) / len(seeds)
-        pred_y['fold_%d_seed_%d' % (fold, seed)] = (model.predict(df_test[feats]) * df_test['check_weight'])
+        pred_y['fold_%d_seed_%d' % (fold, seed)] = (model.predict(df_test[feats]))
         importance += model.feature_importance(importance_type='gain') / fold_num
         # score.append(auc(df_train.loc[val_idx, LABEL], model.predict(df_train.loc[val_idx, feats])))
 
@@ -163,7 +163,7 @@ feats_importance['name'] = feats
 feats_importance['importance'] = importance
 print(feats_importance.sort_values('importance', ascending=False)[:30])
 
-df_train['oof'] = oof * df_train['check_weight']
+df_train['oof'] = oof # * df_train['check_weight']
 # print(np.mean(score), np.std(score))
 m = mape(df_train[LABEL], df_train['oof'])
 score = 1 / (1 + m)

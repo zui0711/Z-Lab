@@ -1,6 +1,6 @@
 # Whoiswho
 
-## Team **LGB YYDS**
+## Team **LGB YYDS** RANK9
 
 ## Prerequisites
 - Windows
